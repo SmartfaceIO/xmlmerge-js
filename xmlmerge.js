@@ -160,20 +160,23 @@ function isEquNode(obj1, obj2, config) {
     if (obj1.nodeName == obj2.nodeName) {
         var max = config.length;
         for (var i = 0; i < max; ++i) {
-            if (config[i].nodename == obj1.nodeName) {
+            if (config[i].nodename == obj1.nodeName || config[i].nodename === "*") {
                 if (config[i].attrname == '*') {
                     return true;
                 }
 
                 var attr1 = findNodeAttr(obj1, config[i].attrname);
-                if (attr1 == null) {
+                if (attr1 == null && config[i].nodename !== "*") {
                     return false;
                 }
 
                 var attr2 = findNodeAttr(obj2, config[i].attrname);
-                if (attr2 == null) {
+                if (attr2 == null && config[i].nodename !== "*") {
                     return false;
                 }
+
+                if(!attr1 && !attr2)
+                    return true;
 
                 if (attr1.value == attr2.value) {
                     return true;
