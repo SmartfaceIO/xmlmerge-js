@@ -4,7 +4,6 @@
 
 var DOMParser = require('xmldom').DOMParser;
 var XMLSerializer = require('xmldom').XMLSerializer;
-var pd = require('pretty-data').pd;
 var fs = require('fs');
 //var logger = require('./logger');
 var csv2obj = require("heyutils").csv2obj;
@@ -242,7 +241,7 @@ function merge(str1, str2, config, callback) {
 
     mergeObj(obj1.documentElement, obj2.documentElement, config);
 
-    var str = pd.xml(new XMLSerializer().serializeToString(obj1));
+    var str = new XMLSerializer().serializeToString(obj1);
     callback(str);
 }
 
