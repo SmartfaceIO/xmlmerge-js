@@ -218,6 +218,10 @@ function mergeObj(obj1, obj2, config) {
     for (var i = 0; i < nums2; ++i) {
         var curobj = childs2[i];
         if (curobj.nodeName == '#text') {
+            if(config.some(cfg => cfg.overwrite && (cfg.nodename === obj2.nodeName || cfg.nodename === "*"))){
+                obj1.childNodes[i].nodeValue = curobj.nodeValue;
+                obj1.childNodes[i].data = curobj.data;
+            }
             continue ;
         }
 
