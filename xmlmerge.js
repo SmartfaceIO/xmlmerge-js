@@ -146,11 +146,12 @@ function addChild(obj, child) {
 function findNodeAttr(obj, attrName) {
     var attrs = obj.attributes;
 
-    for (var i = 0; i < attrs.length; ++i) {
-        if (attrs[i].nodeName == attrName) {
-            return attrs[i];
+    if (attrs)
+        for (var i = 0; i < attrs.length; ++i) {
+            if (attrs[i].nodeName == attrName) {
+                return attrs[i];
+            }
         }
-    }
 
     return null;
 }
