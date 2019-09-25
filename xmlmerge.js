@@ -8,137 +8,6 @@ var fs = require('fs');
 //var logger = require('./logger');
 var csv2obj = require("heyutils").csv2obj;
 
-//function isInLst(obj, lstNode) {
-//    var max = lstNode.length;
-//    for (var i = 0; i < max; ++i) {
-//        if (obj.nodeName == lstNode[i]) {
-//            return true;
-//        }
-//    }
-//
-//    return false;
-//}
-//
-//function findNodeAttr(obj, attrName) {
-//    var attrs = obj.attributes;
-//
-//    for (var i = 0; i < attrs.length; ++i) {
-//        if (attrs[i].nodeName == attrName) {
-//            return attrs[i];
-//        }
-//    }
-//
-//    return null;
-//}
-//
-//function isEquNode(obj1, obj2, lstNode, lstAttr) {
-//    if (obj1.nodeName == obj2.nodeName) {
-//        if (isInLst(obj1, lstNode)) {
-//            return true;
-//        }
-//
-//
-//    }
-//}
-//
-//function isEquAttribute(obj1, obj2) {
-//    var att1 = obj1.attributes;
-//    var att2 = obj2.attributes;
-//
-//    for (var i = 0; i < att1.length; ++i) {
-//        logger.normal.log('info', 'att1 ' + att1[i].nodeName + ' ' + att1[i].value);
-//    }
-//}
-//
-//function findChild(obj, child, lstNode) {
-//    var nums = obj.childNodes.length;
-//    var childs = obj.childNodes;
-//    for (var i = 0; i < nums; ++i) {
-//        var curobj = childs[i];
-//        //logger.normal.log('info', 'find ' + curobj.nodeName + ' ' + child.nodeName);
-//        if (curobj.nodeName == child.nodeName) {
-//            if (isInLst(curobj, lstNode)) {
-//                return curobj;
-//            }
-//
-//            if (isEquAttribute(curobj, child)) {
-//                return curobj;
-//            }
-//        }
-//    }
-//
-//    return null;
-//}
-//
-//function addChild(obj1, child) {
-//    obj1.appendChild(child);
-//}
-//
-//function mergeObj(obj1, obj2, lstNode, lstAttr) {
-//    if (obj1.nodeName == obj2.nodeName) {
-//        if (!isInLst(obj1, lstNode)) {
-//            if (isEquAttribute(obj1, obj2)) {
-//                addChild(obj1, obj2);
-//
-//                return ;
-//            }
-//        }
-//    }
-//
-//    if (!obj1.hasChildNodes() || !obj2.hasChildNodes()) {
-//        return ;
-//    }
-//
-//    var nums2 = obj2.childNodes.length;
-//    var childs2 = obj2.childNodes;
-//
-//    for (var i = 0; i < nums2; ++i) {
-//        var curobj = childs2[i];
-//        if (curobj.nodeName == '#text') {
-//            continue ;
-//        }
-//
-//        logger.normal.log('info', 'obj2 ', curobj.nodeName);
-//
-//        var obj1child = findChild(obj1, curobj, lstNode);
-//        if (obj1child != null) {
-//            logger.normal.log('info', 'merge ', curobj.nodeName);
-//
-//            mergeObj(obj1child, curobj, lstNode);
-//        }
-//        else {
-//            addChild(obj1, curobj);
-//            //obj2.removeChild(curobj);
-//        }
-//    }
-//}
-//
-//function merge1(str1, str2, lstNode, lstAttr, func) {
-//    var obj1, obj2;
-//
-//    obj1 = new DOMParser().parseFromString(str1);
-//    obj2 = new DOMParser().parseFromString(str2);
-//
-//    mergeObj(obj1.documentElement, obj2.documentElement, lstNode);
-//
-//    var str = new XMLSerializer().serializeToString(obj1);
-//
-//    func(str);
-//}
-//
-//function mergeAndroidManifest(str1, str2, func) {
-//    var obj1, obj2;
-//
-//    obj1 = new DOMParser().parseFromString(str1);
-//    obj2 = new DOMParser().parseFromString(str2);
-//
-//    mergeObj(obj1.documentElement, obj2.documentElement);
-//
-//    var str = new XMLSerializer().serializeToString(obj1);
-//
-//    func(str);
-//}
-
 function addChild(obj, child) {
     obj.appendChild(child);
 }
@@ -219,9 +88,11 @@ function mergeObj(obj1, obj2, config) {
     for (var i = 0; i < nums2; ++i) {
         var curobj = childs2[i];
         if (curobj.nodeName == '#text') {
-            if(config.some(cfg => cfg.overwrite && (cfg.nodename === obj2.nodeName || cfg.nodename === "*"))){
+            if (obj1.childNodes[i]) {
                 obj1.childNodes[i].nodeValue = curobj.nodeValue;
                 obj1.childNodes[i].data = curobj.data;
+            } else {
+                obj1.childNodes[i] = curobj.cloneNode(true);
             }
             continue ;
         }
